@@ -219,7 +219,7 @@
 
                     <div class="col-md-3">
                         <span class="bi bi-pin-map"></span>
-                        @Html.LabelFor(model => model.Direccion.Colonia)
+                        @Html.LabelFor(model => model.Direccion.Colonia.IdColonia)
                         @if (Model.Direccion.Colonia.Colonias == null)
                         {
                             @Html.DropDownListFor(model => model.Direccion.Colonia.IdColonia, new SelectList(string.Empty, "Value", "Text"), "Selecciona una colonia", new { @class = "form-control", @id = "ddlColonia" })
@@ -231,6 +231,7 @@
                             @Html.ValidationMessageFor(model => model.Direccion.Colonia.IdColonia)
                         }
                     </div>
+
 
                 </div>
 
@@ -300,13 +301,13 @@
                 $("#ddlColonia").empty();
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ColoniaGetByIdMunicipio", "UsuarioController")', // Reemplaza "TuControlador" con el nombre de tu controlador
+                    url: '@Url.Action("ColoniaGetByIdMunicipio", "Usuario")', // Reemplaza "TuControlador" con el nombre de tu controlador
                     dataType: 'json',
                     data: { idMunicipio: $("#ddlMunicipio").val() },
                     success: function (colonias) {
                         $("#ddlColonia").append('<option value="0">' + 'Seleccione una opción' + '</option>');
                         $.each(colonias, function (i, colonia) {
-                            $("#ddlColonia").append('<option value="' + colonia.IdColonia + '">' + colonia.Nombre + '</option>');
+                            $("#ddlColonia").append('<option value="' + colonia.idColonia + '">' + colonia.nombre + '</option>');
                         });
                     },
                     error: function (ex) {

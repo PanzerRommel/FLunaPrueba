@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BL
 {
@@ -16,29 +14,32 @@ namespace BL
             {
                 using (DL.FlunaPruebaContext context = new DL.FlunaPruebaContext())
                 {
-                    var query = context.Colonia.FromSqlRaw($"ColoniaGetByIdMunicipio").AsEnumerable().ToList();
+                    var objquery = context.Colonia
+                        .FromSqlInterpolated($"EXEC ColoniaGetByIdMunicipio {IdMunicipio}")
+                        .AsEnumerable()
+                        .ToList();
 
-                    if (query != null)
+                    if (objquery != null)
                     {
-                        foreach (var obj in query)
+                        result.Objects = new List<object>();
+                        foreach (var item in objquery)
                         {
                             ML.Colonia colonia = new ML.Colonia();
-
-                            colonia.IdColonia = obj.IdColonia;
-                            colonia.Nombre = obj.Nombre;
-                            colonia.CodigoPostal = obj.CodigoPostal;
+                            colonia.IdColonia = item.IdColonia;
+                            colonia.Nombre = item.Nombre;
+                            colonia.CodigoPostal = item.CodigoPostal;
 
                             colonia.Municipio = new ML.Municipio();
-                            colonia.Municipio.IdMunicipio = obj.IdMunicipio.Value;
-                            result.Objects.Add(colonia);
+                            colonia.Municipio.IdMunicipio = item.IdMunicipio.Value;
 
+                            result.Objects.Add(colonia);
                         }
                         result.Correct = true;
                     }
                     else
                     {
                         result.Correct = false;
-                        result.ErrorMessage = "No se pudo completar el registro";
+                        result.ErrorMessage = "No se puede mostrar registro";
                     }
                 }
             }
