@@ -1,0 +1,89 @@
+﻿@model ML.Usuario
+@{
+    ViewData["Title"] = "GetAll";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Usuario</h2>
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h5>Seleccione un Usuario para editarlo o + para agregar...</h5>
+    </div>
+</div>
+
+
+@*<div class ="row">*@
+<div style="float:right;">
+    @Html.ActionLink("Agregar Usuario", "Form", "Usuario", htmlAttributes: new {@class = "btn btn-success"})   
+</div>
+
+<table class="table table-bordered table-responsive">
+    <thead>
+        <tr>
+            <td>Editar</td>
+            <td class="visually-hidden">IdUsuario</td>
+            <td>Nombre</td>
+            <td>Apellido Paterno</td>
+            <td>Apellido Materno</td>
+            <td>Email</td>
+            <td>UserName</td>
+            <td class="visually-hidden">Password</td>
+            <td>Fecha de Nacimiento</td>
+            <td>Sexo</td>
+            <td>Telefono</td>
+            <td>Celular</td>
+            <td>CURP</td>
+            <td>Imagen</td>
+            <td>Rol</td>
+            <td>Direccion</td>
+            <td>Eliminar</td>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (ML.Usuario usuario in Model.Usuarios)
+        {
+            <tr>
+                <td><a class="btn btn-warning bi bi-pencil-square" href="@Url.Action("Form", "Usuario", new { IdUsuario = usuario.IdUsuario })"></a></td>
+
+                <td class="visually-hidden">@usuario.IdUsuario</td>
+                <td>@usuario.Nombre</td>
+                <td>@usuario.ApellidoPaterno</td>
+                <td>@usuario.ApellidoMaterno</td>
+                <td>@usuario.Email</td>
+                <td>@usuario.UserName</td>
+                <td class="visually-hidden">@usuario.Password</td>
+                <td>@usuario.FechaNacimiento</td>
+                <td>@usuario.Sexo</td>
+                <td>@usuario.Telefono</td>
+                <td>@usuario.Celular</td>
+                <td>@usuario.CURP</td>
+                <td>
+                    @if (usuario.Imagen != null)
+                    {
+                        <img src="data:image/png;base64,@Convert.ToBase64String(usuario.Imagen)" alt="Imagen del usuario" width="50" />
+                    }
+                </td>
+
+                <td>@usuario.Rol.Nombre</td>
+                <td>
+                    Calle: @usuario.Direccion.Calle,
+                    Numero Interior: @usuario.Direccion.NumeroInterior,
+                    Numero Exterior: @usuario.Direccion.NumeroExterior,
+                    Colonia: @usuario.Direccion.Colonia.Nombre,
+                    Alcaldía: @usuario.Direccion.Colonia.Municipio.Nombre
+                    Estado: @usuario.Direccion.Colonia.Municipio.Estado.Nombre,
+                    País: @usuario.Direccion.Colonia.Municipio.Estado.Pais.Nombre 
+                </td>
+
+                <td>
+                    <a class="btn btn-danger bi bi-trash2" href="@Url.Action("Delete", "Usuario", new {IdUsuario = usuario.IdUsuario })" onclick="return confirm('Estas seguro que deseas eliminar este registro?');">   </a>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+</table>
